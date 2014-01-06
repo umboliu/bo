@@ -1,0 +1,41 @@
+    /* Get words between every '/' pair is the key idea */
+    /* pop back when meets "..", do nothing when meets "." and push every thing otherwise*/
+    string getString(string path,int &i){
+        string ret;
+        while(path[i] !='/' && i < path.length()){
+            ret.push_back(path[i++]);
+        }
+        return ret;
+    }
+    string simplifyPath(string path) {
+        string ret;
+        if(path.empty()){
+            ret.push_back('/');
+            return ret;
+        }
+        
+        int i = 0;
+        deque<string> words;
+        while(i < path.length()){
+            if(path[i] == '/') ++i;
+            else{
+                string s = getString(path,i);
+                if(s.compare("..") == 0){ 
+                    if(!words.empty()) words.pop_back();
+                }else if(s.compare(".") != 0){
+                    words.push_back(s);
+                }
+            } 
+        }
+        
+        if(words.empty())
+            ret.push_back('/');
+        else{
+            while(!words.empty()){
+                ret.push_back('/');
+                ret.append(words.front());
+                words.pop_front();
+            }
+        }
+        return ret;
+    }
