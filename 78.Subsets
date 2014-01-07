@@ -1,0 +1,41 @@
+
+    /*Another practice of Q77, be familiar with all k permutations out of n elements! */
+    vector<vector<int> > combine(vector<int> S,int k){
+        vector<vector<int> > ret;
+        if(k == 1){
+            for(int i = 0; i < S.size(); i++){
+                vector<int> temp(1,S[i]);
+                ret.push_back(temp);
+            }
+            return ret;
+        }
+        
+        int n = S.size();
+        for(int j = 0; j <= n - k; j++){
+            vector<int> newS(S.begin() + j + 1,S.end());
+            vector<vector<int> > tempret = combine(newS,k - 1);
+            for(int l = 0; l < tempret.size(); l++){
+                vector<int> t = tempret[l];
+                t.insert(t.begin(),S[j]);
+                ret.push_back(t);
+            }
+        }
+        return ret;
+    }
+
+    vector<vector<int> > subsets(vector<int> &S) {
+        vector<int> subret;
+        vector<vector<int> > ret;
+        ret.push_back(subret);
+        if(S.empty()) return ret;
+        
+        sort(S.begin(),S.end());
+        for(int size = 1; size <= S.size(); size++){
+            vector<vector<int> > tempret = combine(S,size);
+            for(int j = 0; j < tempret.size(); j++){
+                ret.push_back(tempret[j]);
+            }
+        }
+        
+        return ret;
+    }
