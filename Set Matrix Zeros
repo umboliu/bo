@@ -1,0 +1,27 @@
+    void compansate(vector<vector<int> > &matrix,int I,int J,char a){
+        if(a == 'i'){
+            for(int i = 0; i < I; i++)
+                matrix[i][J] = 0;
+        }else{
+            for(int j = 0; j < J; j++)
+                matrix[I][j] = 0;
+        }
+    }
+
+    void setZeroes(vector<vector<int> > &matrix) {
+        if(matrix.empty()) return;
+        unordered_map<int,bool> imap;
+        unordered_map<int,bool> jmap;
+        
+        for(int i = 0; i < matrix.size(); i++){
+            for(int j = 0; j < matrix[0].size(); j++){
+                if(matrix[i][j] == 0){
+                    if(imap.find(i) == imap.end()){ imap[i] = true; compansate(matrix,i,j,'j'); }
+                    if(jmap.find(j) == jmap.end()){ jmap[j] = true; compansate(matrix,i,j,'i'); }
+                }else{
+                    if(imap.find(i) != imap.end() || jmap.find(j) != jmap.end())
+                        matrix[i][j] = 0;
+                }
+            }
+        }
+    }
