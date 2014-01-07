@@ -1,0 +1,27 @@
+    void move(int A[],int first,int last){
+        for(int i = last; i >= first; i--)
+            A[i + 1] = A[i];
+    }
+
+    /*0,1,0*/
+    void MergeSortColors(int A[],int start,int end){
+        if(start == end) return;
+        
+        int mid = (start + end)/2;
+        MergeSortColors(A,start,mid);
+        MergeSortColors(A,mid + 1,end);
+        
+        int l = start,r = mid + 1;
+        while(l <= mid && r <= end){
+            if(A[r] < A[l]){
+                int temp = A[r];
+                move(A,l,mid);
+                A[l] = temp;
+                ++l;++r;mid++;
+            }else ++l;
+        }
+    }
+
+    void sortColors(int A[], int n) {
+        MergeSortColors(A,0,n - 1);
+    }
