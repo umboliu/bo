@@ -1,0 +1,34 @@
+    /*Recursion!!!*/
+    vector<vector<int> > Combine(vector<int> store,int k){
+        vector<vector<int> > ret;
+        if(k == 1){
+            for(int i = 0; i < store.size(); i++){
+                vector<int> temp(1,store[i]);
+                ret.push_back(temp);
+            }
+            return ret;
+        }
+
+        int n = store.size();
+        for(int i = 0; i <= n - k; i++){
+            vector<int> newstore(store.begin() + i + 1,store.end());
+            vector<vector<int> > rettemp = Combine(newstore,k - 1);
+            for(int j = 0; j < rettemp.size(); j++){
+                vector<int> temp = rettemp[j];
+                temp.insert(temp.begin(),store[i]);
+                ret.push_back(temp);
+            }
+        }
+        return ret;
+    }
+
+    vector<vector<int> > combine(int n, int k) {
+        vector<int> store;
+        vector<vector<int> > ret;
+        if(k == 0){ ret.push_back(store); return ret; }
+        for(int i = 1; i <= n; i++)
+            store.push_back(i);
+        if(k >= n) { ret.push_back(store); return ret; }
+
+        return Combine(store,k);
+    }
