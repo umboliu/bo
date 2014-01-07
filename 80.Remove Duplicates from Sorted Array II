@@ -1,0 +1,25 @@
+    int removeDuplicates(int A[], int n) {
+        int len = 0;
+        if(A == NULL || n == 0) return len;
+        
+        int curNum = A[0],count = 1;
+        int rpos = 1, move = 1;
+        bool limit = false;
+        
+        while(move < n){
+            if(A[move] == curNum && limit == false){
+                A[rpos] = A[move];
+                ++move;++rpos;++count;
+                limit = true;
+            }else if(A[move] == curNum && limit == true){
+                ++move;
+            }else{
+                limit = false;
+                curNum = A[move];
+                A[rpos] = A[move];
+                ++move;++rpos;++count;
+            }
+        }
+        
+        return count;
+    }
