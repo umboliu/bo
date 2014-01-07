@@ -1,0 +1,63 @@
+    /* 1,1,1,2,2,2,2,4,5,5,5*/
+    /* 5,5,1,1,1,2,2,2,2,4,5*/
+    /* best case:O(lgn) worst case:O(n) */
+    
+    bool rotatedBS(int A[],int start,int end,int target){
+        if(start > end) return false;
+        if(start == end){
+            if(A[start] == target) return true;
+            else return false;
+        }
+        
+        int mid = (start + end)/2;
+        if(A[mid] == target) return true;
+        else if(A[start] != A[end]){
+            if(A[start] <= A[mid] && A[mid] <= A[end]){
+                if(A[mid] < target) 
+                    return rotatedBS(A,mid + 1,end,target);
+                else 
+                    return rotatedBS(A,start,mid - 1,target);
+            }else if(A[start] >= A[mid] && A[mid] <= A[end]){
+                if(A[mid] < target){
+                    if(target <= A[end]) 
+                        return rotatedBS(A,mid + 1,end,target);
+                    else 
+                        return rotatedBS(A,start,mid - 1,target);
+                }else 
+                    return rotatedBS(A,start,mid - 1,target);
+            }else if(A[start] <= A[mid] && A[mid] >= A[end]){
+                if(A[mid] < target) 
+                    return rotatedBS(A,mid + 1,end,target);
+                else{
+                    if(target >= A[start])
+                        return rotatedBS(A,start,mid - 1,target);
+                    else 
+                        return rotatedBS(A,mid + 1,end,target);
+                }
+            }
+        }else{
+            bool nondesc = true;
+            int l = start + 1,num = A[start];
+            while(l <= mid - 1){
+                if(A[l] == target) return true;
+                if(A[l] >= num){
+                    num = A[l];
+                    ++l;
+                }else{ nondesc = false; break; }
+            }
+            
+            if(A[mid] < target){
+                if(nondesc) return rotatedBS(A,mid + 1,end,target);
+                else if(target <= A[end]) return rotatedBS(A,mid + 1,end,target);
+                else return rotatedBS(A,start,mid - 1,target);
+            }else{
+                if(nondesc) return rotatedBS(A,mid + 1,end,target);
+                else return rotatedBS(A,start,mid - 1,target);
+            }
+        }
+    }
+    
+    bool search(int A[], int n, int target) {
+        if(n == 0 || A == NULL) return false;
+        return rotatedBS(A,0,n - 1,target);   
+    }
