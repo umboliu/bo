@@ -1,0 +1,63 @@
+    struct Cinfo{
+        char c;
+        int pos;
+    };
+    
+    void popCQ( unordered_map<char,int> &rmap,
+                unordered_map<char,int> &qmap,
+                queue<Cinfo> &CQ,
+                string S,
+                string &ret,
+                int &minWin,
+                int j,
+                int &count ){
+        int temp = count;
+        while(temp == count){
+            Cinfo Info = CQ.front();
+            CQ.pop();
+            if(--qmap[Info.c] >= rmap[Info.c]){
+                int winSize = j - CQ.front().pos + 1;
+                if(winSize <= minWin){
+                    minWin = winSize;
+                    ret = S.substr(CQ.front().pos,minWin);
+                }
+            }else --count;
+        }
+    }
+
+    string minWindow(string S, string T) {
+        string ret;
+        if(S.length() < T.length() || (S.empty() && T.empty())) return ret;
+
+        unordered_map<char,int> qmap,rmap;
+        for(int i = 0; i < T.length(); i++){
+            qmap[T[i]] = 0;
+            if(rmap.find(T[i]) == rmap.end())
+                rmap[T[i]] = 1;
+            else ++rmap[T[i]];
+        }
+
+        int count = 0,minWin = S.length();
+        queue<Cinfo> CQ;
+
+        for(int j = 0; j < S.length(); j++){
+            if(rmap.find(S[j]) != rmap.end()){
+                Cinfo Info;
+                Info.c = S[j];
+                Info.pos = j;
+                CQ.push(Info);
+                if(rmap[S[j]] > qmap[S[j]]) ++count;
+                ++qmap[S[j]];
+                if(count == T.length()){
+                    int winSize = j - CQ.front().pos + 1;
+                    if(winSize <= minWin){
+                        minWin = winSize;
+                        ret = S.substr(CQ.front().pos,winSize);
+                    }
+                    popCQ(rmap,qmap,CQ,S,ret,minWin,j,count);
+                }
+            }
+        }
+
+        return ret;
+    }
