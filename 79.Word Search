@@ -1,0 +1,55 @@
+    bool checkExist(vector<vector<char> > &board,
+                    vector<vector<bool> > &used,
+                    string word,int cur, 
+                    int curi,int curj,
+                    int m,int n ){
+                        
+        if(cur == word.length()) return true;
+        
+        if(curj > 0 && used[curi][curj - 1] == false && board[curi][curj - 1] == word[cur]){
+            used[curi][curj - 1] = true;
+            if(checkExist(board,used,word,cur + 1,curi,curj - 1,m,n) == true) return true;
+            used[curi][curj - 1] = false;
+        }
+        
+        if(curi > 0 && used[curi - 1][curj] == false && board[curi - 1][curj] == word[cur]){
+            used[curi - 1][curj] = true;
+            if(checkExist(board,used,word,cur + 1,curi - 1,curj,m,n) == true) return true;
+            used[curi - 1][curj] = false;   
+        }
+        
+        if(curj < n && used[curi][curj + 1] == false && board[curi][curj + 1] == word[cur]){
+            used[curi][curj + 1] = true;
+            if(checkExist(board,used,word,cur + 1,curi,curj + 1,m,n) == true) return true;
+            used[curi][curj + 1] = false;    
+        }    
+    
+        if(curi < m && used[curi + 1][curj] == false && board[curi + 1][curj] == word[cur]){
+            used[curi + 1][curj] = true;
+            if(checkExist(board,used,word,cur + 1,curi + 1,curj,m,n) == true) return true;
+            used[curi + 1][curj] = false;   
+        }
+        
+        return false;
+    }
+
+    bool exist(vector<vector<char> > &board, string word) {
+        if(board.empty() && word.empty()) return true;
+        if(board.empty()) return false;
+        if(word.empty()) return true;
+        
+        int m = board.size(),n = board[0].size(),cur = 0;
+        vector<vector<bool> > used(m,vector<bool> (n,false));
+        
+         for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(board[i][j] == word[cur] && used[i][j] == false){
+                    used[i][j] = true;
+                    if(checkExist(board,used,word,cur + 1,i,j,m - 1,n - 1)) return true;
+                    used[i][j] = false;
+                }
+            }
+        }
+        
+        return false;
+    }
