@@ -1,0 +1,14 @@
+    vector<int> twoSum(vector<int> &numbers, int target) {
+         int index2;
+        vector<int> result;
+         map<int,int> nummap;
+         for( int i=0;i<numbers.size();++i ){
+             index2 = i;
+             int left = target - numbers[i];
+             if( nummap.find(left) != nummap.end() ){
+                 result.push_back(nummap[left]+1);
+                 result.push_back(index2+1);
+                return result;
+             }else nummap[numbers[i]] = index2;
+         }
+    }
