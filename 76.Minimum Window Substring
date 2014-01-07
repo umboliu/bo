@@ -1,3 +1,8 @@
+    /* Idea is to use a queue and push character of T in S into the queue until we get all characters
+       then compute the window size and pop element in the queue and compute new window size if there 
+       are still enough characters in the queue to form T, which keeps going on until there are T.length() - 1
+       elements in the queue(waitint for the new one to form T again)
+    */
     struct Cinfo{
         char c;
         int pos;
