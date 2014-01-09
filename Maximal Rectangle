@@ -1,0 +1,52 @@
+    /*
+    This algorithm is O(n^3) with a small optimization(break when all chars in a column is 0)
+    there can be a O(n^2) solution by using Dynamic programming and expanding hanging lines to left and right to
+    form a rectangle
+    the DP version maintains 3 2D matrices H,L,R where 
+    Case 1 -- matrix(i, j) = 1
+    H(i, j) = H(i-1, j) + 1
+    L(i, j) = max( L(i-1, j), the position of the left  nearest 0 in this row )
+    R(i, j) = min( R(i-1, j), the position of the right nearest 0 in this row )
+    
+    Case 2 -- matrix(i, j) = 0
+    H(i, j) = 0
+    L(i, j) = 0
+    R(i, j) = n
+    */
+    int maximalRectangle(vector<vector<char> > &matrix) {
+        if(matrix.empty()) return 0;
+        
+        int ret = 0, m = matrix.size(), n = matrix[0].size();
+        
+        for(int col = 0; col < n; col++){
+            vector<vector<char> > M = matrix;
+            for(int lcol = col; lcol < n; lcol++){
+                int maxarea = 0,area = 0,unit = lcol - col + 1;
+                for(int row = 0; row < m; row++){
+                    if(lcol == col){
+                        if(M[row][col] == '0' && area != 0){
+                            if(maxarea < area) maxarea = area;
+                            area = 0;
+                        }else if(M[row][lcol] == '1'){ 
+                            if(++area > maxarea)
+                                maxarea = area;
+                        }
+                    }else{
+                        if(M[row][lcol] == '1' && M[row][lcol - 1] == '1'){
+                            area += unit;
+                            if(maxarea < area) maxarea = area;
+                        }else{
+                            M[row][lcol] = '0';
+                            if(area != 0)
+                                if(maxarea < area) maxarea = area;
+                            area = 0;
+                        }
+                    }
+                }
+                if(maxarea == 0) break;
+                else if(maxarea > ret) ret = maxarea;
+            }
+        }
+        
+        return ret;
+    }
