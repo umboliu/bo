@@ -1,0 +1,30 @@
+    ListNode *partition(ListNode *head, int x) {
+        if(head == NULL || head -> next == NULL) return head;
+        ListNode *shead = NULL,*smove = NULL,*ghead = NULL,*gmove = NULL;
+        ListNode *mover = head;
+        
+        while(mover){
+            if(mover -> val < x){
+                if(shead == NULL){
+                    smove = shead = mover;
+                }else{
+                    smove -> next = mover;
+                    smove = smove -> next;
+                }
+            }else{
+                if(ghead == NULL){
+                    gmove = ghead = mover;
+                }else{
+                    gmove -> next = mover;
+                    gmove = gmove -> next;
+                }
+            }
+            mover = mover -> next;
+        }
+        
+        if(smove != NULL) smove -> next = ghead;
+        if(gmove != NULL) gmove -> next = NULL;
+        
+        if(shead != NULL) return shead;
+        else return ghead;
+    }
