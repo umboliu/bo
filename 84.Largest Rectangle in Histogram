@@ -1,0 +1,44 @@
+    /* O(n) * 2 to compute left and right furthest possible extended distance by checking each single rectangle at most twice */
+    /* another O(n) to compute and find the maximal value */
+    struct Info{
+        int num;
+        int pos;
+    };
+    
+    void fillInfo(vector<int> h,vector<Info> &I){
+        for(int i = 0; i < h.size(); i++){
+            if(i == 0 || h[i] > h[i - 1]){
+                I[i].num = 0;
+                I[i].pos = i;
+            }else{
+                I[i].num = I[i - 1].num + 1;
+                I[i].pos = I[i - 1].pos;
+                int lastpos = I[i].pos;
+                while(lastpos > 0){
+                    if(h[lastpos - 1] >= h[i]){
+                        I[i].num = I[i].num + I[lastpos - 1].num + 1;
+                        lastpos = I[i].pos = I[lastpos - 1].pos;
+                    }else break;
+                }
+            }
+        }
+    }
+
+    int largestRectangleArea(vector<int> &height) {
+        if(height.size() == 0) return 0;
+        if(height.size() == 1) return height[0];
+        
+        int size = height.size();
+        vector<Info> L(size),R(size);
+        fillInfo(height,L);
+        vector<int> Rheight(height.rbegin(),height.rend());
+        fillInfo(Rheight,R);
+        
+        int ret = 0;
+        for(int i = 0; i < height.size(); i++){
+            int area = (L[i].num + 1 + R[size - i - 1].num)*height[i];
+            if(area > ret) ret = area;
+        }
+        
+        return ret;
+    }
