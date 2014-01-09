@@ -1,0 +1,56 @@
+    /*3D Dynamic programming, not an easy problem*/
+    bool isScramble(string s1, string s2) {
+        if(s1 == s2) return true;
+        int n = s1.length();
+        vector<vector<vector<bool> > > M(n,vector<vector<bool>> (n,vector<bool> (n,false)));
+        
+        for(int level = 0; level < n; level++){
+            for(int j = level; j < n; j++){
+                for(int i = level; i < n; i++){
+                    if(level == 0) M[level][i][j] = (s2[i] == s1[j]?true:false);
+                    else{
+                        bool val = false;
+                        for(int k = 1; k <= level; k++){
+                            val = val || (M[k - 1][i - level + k - 1][j - level + k - 1] && M[level - k][i][j]) ||
+                                     (M[k - 1][i][j - level - 1 + k] && M[level - k][i - k][j]);
+                        }
+                        M[level][i][j] = val;
+                    }
+                }
+            }
+        }
+        
+        return M[n - 1][n - 1][n - 1];
+    }
+    
+    /* Below is a back track version, takes a long time
+    bool RecScr(string s1,string s2){
+        if(s1 == s2) return true;
+        if(s1.length() == 1 && s2.length() == 1){
+            bool ret = (s1 == s2?1:0);
+            return ret;
+        }
+    
+        for(int midlen = 1; midlen <= s1.length() - 1; midlen++){    
+            string s1l = s1.substr(0,midlen),s1r = s1.substr(midlen);
+            string s2l = s2.substr(0,midlen),s2r = s2.substr(midlen);
+            string s2l1 = s2.substr(0,s1r.length()),s2r1 = s2.substr(s1r.length());
+            if(RecScr(s1l,s2l))
+                if(RecScr(s1r,s2r))
+                    return true;
+            if(RecScr(s1l,s2r1))
+                if(RecScr(s1r,s2l1))
+                    return true;
+        }
+        
+        return false; 
+    }
+    
+    bool isScramble(string s1, string s2) {
+        if(s1 == s2) return true;    
+        if(s1.empty() && s2.empty()) return true;
+        if(s1.empty() || s2.empty()) return false;
+        
+        return RecScr(s1,s2);
+    }
+    */
