@@ -1,0 +1,26 @@
+    ListNode *deleteDuplicates(ListNode *head) {
+        if(head == NULL || head -> next == NULL) return head;
+        ListNode *newhead = NULL,*newmove = NULL;
+
+        ListNode *move = head,*curmove = head;
+        int curval = head -> val;
+
+        while(move){
+            while( move != NULL && move->val == curval){
+                move = move -> next;
+            }
+
+            if(move == curmove -> next){
+                if(newhead == NULL){ newmove = curmove; newhead = curmove; }
+                else{ newmove -> next = curmove; newmove = newmove -> next; }
+            }
+
+            if(move != NULL){
+                curval = move -> val;
+                curmove = move;
+            }
+        }
+
+        if(newmove != NULL) newmove -> next = NULL;
+        return newhead;
+    }
