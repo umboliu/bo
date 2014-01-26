@@ -1,0 +1,42 @@
+  
+    // does not satisfy the requirement that no extra memory allocated because I use sort()
+    
+    /*************************************************************************************/
+    // wrong output + seg fault!!! only for 453332
+    // think thoughfully before coding!!!!!
+    // below is a bad example when think about only normal case and begin coding
+    void swap(vector<int> &num,int i,int j){
+        int temp = num[i];
+        num[i] = num[j];
+        num[j] = temp;
+    }
+    
+    int swapdigit(int i, int j,vector<int> num){
+        swap(num,i,j);
+        int sum = 0;
+        for(int k = 0;k < num.size();k++){
+            sum = sum * 10 + num[k];
+        }
+        return sum;
+    }
+
+    void nextPermutation(vector<int> &num) {
+        if(num.size() == 0 || num.size() == 1) return;
+        int orgnum = swapdigit(0,0,num);
+    
+        for(int i = num.size() - 1; i > 0;i--){
+            if(swapdigit(i,i - 1,num) > orgnum){
+                int swapbit = i, min = num[i];
+                for(int k = i;k < num.size();k++){
+                    if(num[k] > num[i - 1] && num[k] < min)
+                        swapbit = k;
+                        min = num[k];
+                }
+                swap(num,swapbit,i - 1);
+                sort(num.begin() + i,num.end());
+                return;
+            }
+        }
+        sort(num.begin(),num.end());
+        return;
+    }
