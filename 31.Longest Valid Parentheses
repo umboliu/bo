@@ -1,0 +1,30 @@
+    // Really smart way to count the longest! use a stack to store the index of '('
+       Once meet a ')' pop the top '(' in the stack and mark the value of both of them as 1 in the vector
+       this vector is used to record the position of every successive braces pair which are seperated by 0
+       e.g.  00 11 11 0 11 are )) () () ( ()
+    //
+    /***********************************************************/
+    // I tried two wrong algorithms to get the final working one 
+    // you can do O(n^2) for naive 
+    // but never use it as a final solution,try hard
+    int longestValidParentheses(string s) {
+        int len = s.length(), max = 0;
+        stack<int> left;
+        vector<int> result(len,0);
+        for(int i = 0;i < len;i++){
+            if(s[i] == '(')
+                left.push(i);
+            else if(!left.empty()){
+                result[i] = result[left.top()] = 1;
+                left.pop();
+            }
+        }
+        
+        int temp = 0;
+        for(int i = 0;i < len;i++){
+            if(result[i] == 1) ++temp;
+            else temp = 0;
+            if(temp > max) max =temp;
+        }
+        return max;
+    }
